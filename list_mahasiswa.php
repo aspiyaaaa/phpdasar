@@ -1,32 +1,50 @@
 <?php
+$mysqli = new mysqli('localhost', 'root','','tedc');
 
-$data_mahasiswa = [
-	[1, "D212111020","Sophia Nurhafshoh K"],
-	[2, "D212111021","Triana Siti Aryani"],
-	[3, "D212111022","Yunita Riani Hidayat"],
-	[4, "D212111023","Ajeng Aprilyani"],
-	[5, "D212111025","Aspiya Huwaida"],
-	[6, "D212111026","Aura Maliya"],
-	[7, "D212111028","Fanisa Tri Agna Fata"],
-	[8, "D212111029","Ineu Rahmawati"],
-	[9, "D212111030", "Muhammad Reza A"],
-	[10, "D212111031","Siti Nur Rohimah"]
-];
+$result = $mysqli->query("SELECT students.nim, students.nama, study_programs.name 
+                          FROM students INNER JOIN study_programs ON students.study_program_id = study_programs.id 
+                          WHERE study_programs.id= 12;");
 
-echo"<table border='1' cellspacing='0'>";
-echo"<tr>
-		<th>NO</th>
-		<th>NIM</th>
-		<th>NAMA</th>
-	</tr>";
 
-foreach ($data_mahasiswa as $dm) {
-	echo"<tr>";
-	echo"<td>".$dm[0]."</td>";
-	echo"<td>".$dm[1]."</td>";
-	echo"<td>".$dm[2]."</td>";
-	echo"</tr>";
+$mahasiswa = [];
+
+while ($row = $result->fetch_assoc()) {
+    array_push($mahasiswa, $row);
 }
-
-echo"</table>";
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAHASISWA</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+    <h1 align="center"> Data Mahasiswa KA 2021 </h1>
+    <div class="container"> </div>
+
+    <table class="table table-bordered table-hover">
+        <tr>
+            <th>NO</th>
+            <th>NIM</th>
+            <th>Nama</th>
+            <th>Program Studi</th>
+        </tr>
+        <?php 
+
+        $no=1;
+            foreach ($mahasiswa as $row) { ?>
+            <tr>
+                <td><?= $no++; ?></td>
+                <td><?= $row['nim']; ?></td>
+                <td><?= $row['nama']; ?></td>
+                <td><?= $row['name']; ?></td>
+            </tr>
+        <?php } ?>
+    </table>
+</body>
+</html>
